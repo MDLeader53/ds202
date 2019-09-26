@@ -1,0 +1,49 @@
+---
+title: "lab3"
+author: "Matthew"
+date: "9/26/2019"
+output: html_document
+---
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## question 1 
+```{r cars}
+library(ggplot2)
+ggplot(mpg, aes(displ, hwy)) + geom_point(aes(colour = "blue"))
+```
+
+
+    The following code produces a scatterplot with pink points, even though we specified blue. Why aren’t the points blue? First, explain why this happens and then fix the code to correctly produce a scatterplot with blue points.
+
+## question 2
+
+Use the fbi dataset in the classdata library to answer this question. Write code to replicate the following plot. Make sure to pay attention to labels, including the legend!
+
+## question 3 
+
+We want to create a side-by-side boxplot of reported crimes (Count) for violent and non-violent crime (Violent.crime). I’ve taken log(Count) so that the data is easier to visualize. However, the following code doesn’t produce what I expected. Debug this code to produce the plot that we want. Add the appropriate labels
+
+```{r fbi}
+ggplot(fbi,aes(log(Count),Violent.crime)) + geom_boxplot() + coord_flip()
+```
+
+## question 5 
+Critique this plot. What do you think is a problematic feature of this plot and why does it not convey all of the relevant information? Propose an improved plot. Incldue your code. Hint: look carefully at the values for the variables cty and hwy.
+
+
+## question 6 
+
+Are cars in 2008 more fuel efficient than cars in 1999? Use graphs and summary statistics to answer this question. Explain your graphs in context.
+
+Explore the diamonds dataset. What is the distribution of the variable price in this dataset? Are there any factors (or combination of factors) that seem to be highly correlated with price? Use graphs and summary statistics to answer this question.
+
+
+
+
