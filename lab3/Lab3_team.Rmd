@@ -25,6 +25,7 @@ Now it's important to understand what each column stands for. You can find a cod
 
 Initial exploration revealed that some data processing was needed before we could proceed with further visualization. All missing values were encoded with 'NA' as follows:
 ```{r}
+happy <- readRDS("C:/Users/Flame/Documents/ds202/lab3/HAPPY.rds")
 head(happy)
 happy2 <- happy # this df has all of the missing vallues repersented with the same char
 for(i in length(happy2)) happy2[i][happy2[i]=="IAP"||happy2[i]=="DK"]<- "NA"
@@ -48,13 +49,22 @@ head(happySort)
 
 ## Data Exploration 
 
-Two variables of interest are `...` and `...`. Their distributions are as follow: 
+Two variables of interest are `Happy` and `Health`. Their distributions are as follow: 
 ```{r}
+library(ggplot2)
 #insert relevant R code here
 #include graphics. DESCRIBE your plot in context. Make sure it includes axis labels and appropriate title. 
+happy <- readRDS("C:/Users/Flame/Documents/ds202/lab3/HAPPY.rds")
+happy2 <- happy # this df has all of the missing vallues repersented with the same char
+for(i in length(happy2)) happy2[i][happy2[i]=="IAP"||happy2[i]=="DK"]<- "NA"
+ggplot(data = happy2, aes(x = happy2$HAPPY, fill = happy2$SEX) ) + geom_bar(position = position_dodge()) +xlab("Happiness") + ylab("Count of people") + ggtitle("Count of happiness of men and women") + labs(fill = "Sex")
+
+ggplot(data = happy2, aes(x = happy2$HAPPY, fill = happy2$DEGREE) ) + geom_bar(position = position_dodge()) +xlab("Happiness") + ylab("Count of people") + ggtitle("Count of happiness by highest degree achieved") + labs(fill = "Degree Type")
+
+ggplot(data = happy2, aes(x = happy2$HAPPY, fill = happy2$MARITAL) ) + geom_bar(position = position_dodge()) +xlab("Happiness") + ylab("Count of people") + ggtitle("Count of happiness by martial status") + labs(fill = "Marital Status")
 ```
 
-The distribution for `...` is `....`, suggesting that `....` 
+The distributions for sex and happiness seem to suggest that sex does not have much of an effect on happiness. For the second graph, the graph seems to skewed left for people who are in high school or higher. For marital status, married couples are skewed left. This seems to imply that people who have finished a high school degree or higher and whose marital status is married have a better self view of their lives. 
 
 
 
