@@ -157,8 +157,11 @@ Now let's turn our attention to the player biography `bioClean`.
   
 1. Separate the `Hometown` column into two columns, namely the city and the state. Print the first few rows of these two columns. (Hint: look at the `sep=` argument of `separate`)
 ```{r,echo=FALSE,results='hide'}
-  
-head(bio)
+# strsplit only works for input type character vector
+y =  bioClean %>% as.character() %>%  strsplit(bioClean[6],"," )
+#y is a char vector
+print(y)
+head(bioClean)
 ```
 2. How many players are there from each state?
 ```{r,echo=FALSE,results='hide'}
