@@ -62,6 +62,7 @@ The Cyclone football data involves multiple Excel sheets and is in a somewhat me
 
 ```{r}
 library(readxl)
+library(tidyverse)
 library(tidyr)
 defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
 str(defense)
@@ -135,6 +136,13 @@ Now let's turn our attention to the player biography `bioClean`.
 ## Part three: Joining data frames
 
 1. Find out where the offensive players are from by joining the offensive data and player biography data appropriately.
+
+```{r,echo=FALSE,results='hide'}
+head(offense)
+print(bio)
+
+#3) 
+
 2. Is there a relationship between the weight of a player and the receiving yards (`Receiving_YDS`)?
 3. Explore more. Raise a question that can be answered only by looking at two or more data frames. Then answer that question.
 
