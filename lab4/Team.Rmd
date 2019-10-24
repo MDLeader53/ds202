@@ -94,18 +94,30 @@ head(bio)
 head(defense)
 bioClean -> bio$Weight <- as.numeric(bio$Weight)
 
-str(defense[2])
-defenceClean <- defense
-defenceClean$Tackles_Solo <- as.numeric(defense$Tackles_Solo)
-defenceClean$Tackles_ASST <-  as.numeric(defense$Tackles_ASST)
-defenceClean$Tackles_TFL <-  as.numeric(defense$Tackles_TFL)
-defenceClean$Tackles_Sack <-  as.numeric(defense$Tackles_Sack)
-defenceClean$Turnover_FF <-  as.numeric(defense$Turnover_FF)
-defenceClean$Turnover_FR <-  as.numeric(defense$Turnover_FR)
-defenceClean$Turnover_INT <-  as.numeric(defense$Turnover_INT)
-defenceClean$Pass_QBH <-  as.numeric(defense$Pass_QBH)
-defenceClean$Pass_PB <-  as.numeric(defense$Pass_PB)
+head(defense)
+defClean <- defense
+defClean$Tackles_Solo <- as.numeric(defense$Tackles_Solo)
+defClean$Tackles_ASST <-  as.numeric(defense$Tackles_ASST)
+defClean$Tackles_TFL <-  as.numeric(defense$Tackles_TFL)
+defClean$Tackles_Sack <-  as.numeric(defense$Tackles_Sack)
+defClean$Turnover_FF <-  as.numeric(defense$Turnover_FF)
+defClean$Turnover_FR <-  as.numeric(defense$Turnover_FR)
+defClean$Turnover_INT <-  as.numeric(defense$Turnover_INT)
+defClean$Pass_QBH <-  as.numeric(defense$Pass_QBH)
+defClean$Pass_PB <-  as.numeric(defense$Pass_PB)
 head(defenceClean)
+
+head(offense)
+offClean <- offense
+offClean$Receiving_REC <-  as.numeric(offense$Receiving_REC)
+offClean$Receiving_YDS <-  as.numeric(offense$Receiving_YDS)
+offClean$Receiving_TD <-  as.numeric(offense$Receiving_TD)
+offClean$Receiving_ATT <-  as.numeric(offense$Receiving_ATT)
+offClean$Rushing_TD <-  as.numeric(offense$Rushing_TD)
+offClean$`Passing_CMP-ATT` <-  as.numeric(offense$`Passing_CMP-ATT`)
+offClean$Passing_YDS <-  as.numeric(offense$Passing_YDS)
+offClean$Passing_TD <-  as.numeric(offense$Passing_TD)
+offClean$Passing_INT <-  as.numeric(offense$Passing_INT)
 ```
 3. Separate the `Height` column into two columns. Make sure the newly created columns are numeric. Then create one column that represents `Height` (Hint: Use a unit that works well). Drop any irrelavant columns from this process.
 ```{r,echo=FALSE,results='hide'}
@@ -145,8 +157,7 @@ Now let's turn our attention to the player biography `bioClean`.
   
 1. Separate the `Hometown` column into two columns, namely the city and the state. Print the first few rows of these two columns. (Hint: look at the `sep=` argument of `separate`)
 ```{r,echo=FALSE,results='hide'}
-spl bio$Hometown
-
+  
 head(bio)
 ```
 2. How many players are there from each state?
