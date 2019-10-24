@@ -64,6 +64,7 @@ The Cyclone football data involves multiple Excel sheets and is in a somewhat me
 library(readxl)
 library(tidyverse)
 library(tidyr)
+library(dplyr)
 defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
 str(defense)
 ```
@@ -79,13 +80,13 @@ The three Excel sheets are loaded into R but they are not useful to us before so
 1. The player names and opponent names are factors.
 ```{r,echo=FALSE,results='hide'}
 head(defense)
-clean <- defense %<% spread (key = Name, value = Opponent_Opponent)
+clean <- defense %>% spread (key = Name, value = Opponent_Opponent)
 ```
 
 2. All offensive and defensive statistics are numerical. The `Weight` column in Biography is also numeric. (Hint: look at `?mutate_at` if you want to save writing some code). 
 ```{r,echo=FALSE,results='hide'}
 head(defense)
-bioClean -> bio$Weight <- as.numeric(bio$Weight)
+bioClean <- bio$Weight <- as.numeric(bio$Weight)
 
 str(defense[2])
 defenceClean <- defense
@@ -103,7 +104,7 @@ head(defenceClean)
 3. Separate the `Height` column into two columns. Make sure the newly created columns are numeric. Then create one column that represents `Height` (Hint: Use a unit that works well). Drop any irrelavant columns from this process.
 ```{r,echo=FALSE,results='hide'}
 print(bio)
-bioClean <- bio %<% spread (key = Height, value = Class)
+bioClean <- bio %>% spread (key = Height, value = Class)
 ```
 4. By cleaning the three data frames in R, at the end of this step you should have the following three clean data frames: `defClean`, `offClean`, and `bioClean`. Print the structures of these data frames. **Make sure your data types make sense for each variable.**
 
@@ -117,7 +118,7 @@ For the following questions, work on the cleaned data frames `defClean`, `offCle
 ```{r,echo=FALSE,results='hide'}
 print(defense)
 # 1)
-defClean <- defClean %<% spread (key = Name, value = Statistic, 2:5)
+defClean <- defClean %>% spread (key = Name, value = Statistic, 2:5)
 #2)
 ggplot2(defClean, axis())
 #3) 
