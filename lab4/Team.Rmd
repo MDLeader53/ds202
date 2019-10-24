@@ -50,7 +50,7 @@ Your git repo will contain the following files: `team.Rmd` and `team.html` conta
 An excerpt of the individual player data of the Cyclone football team is available from Canvas. Dowload the [excel file](cyclonesFootball2018.xlsx) and put the file next to your Rmd files. 
 
 Some abbreviations for the column names can be found in the Glossaries sheet in the Excel file.
-
+  
 **References:**
 
 - [Iowa State University Athelete](https://cyclones.com/index.aspx)
