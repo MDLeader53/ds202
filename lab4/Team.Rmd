@@ -170,17 +170,21 @@ table(bioClean$State)
 1. Find out where the offensive players are from by joining the offensive data and player biography data appropriately.
 
 ```{r}
-bioClean %>% full_join(offClean,by='Name')
-print(bioClean)
+newOff <-merge(offClean, bioClean, by = "Name")
+print(newOff)
 ```
 2. Is there a relationship between the weight of a player and the receiving yards (`Receiving_YDS`)?
-```{r,echo=FALSE,results='hide'}
-ggplot(bioClean, aes(bioClean$Weight, bioClean$Receiving_YDS)) + geom_point()
+```{r}
+ggplot(newOff, aes(newOff$Weight, newOff$Receiving_YDS)) + xlab("Weight") + ylab("Recieving Yards") + ggtitle("Weight vs Receiving Yards") + geom_point()
 ```
 
+There appears to be no coorelation between Weight and receiving yards.
+
 3. Explore more. Raise a question that can be answered only by looking at two or more data frames. Then answer that question.
-
-
+```{r}
+ggplot(newOff, aes(newOff$Height, newOff$Rushing_YDS)) + xlab("Height") + ylab("Rushing Yards") + ggtitle("Weight vs Rushing Yards") + geom_point()
+```
+There appears to be no coorelation between height and rushing yards. 
 ## Tips
 - Agree on a method to clean the dataset with your teammate. Both teammates can then work on the same cleaned version for downstream analysis.
 - Start early to allow more time to collaborate.
