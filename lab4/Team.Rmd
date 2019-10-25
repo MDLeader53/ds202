@@ -1,7 +1,7 @@
 ---
 title: 'DS 202 - Lab 4: Tidying and Joining'
 subtitle: "Due: Thursday 10/24/2019 by 10 pm"
-author: "Matthew Peterson, Shivam Vashi"
+author: "Matthew Peterson (MDLeader53), Shivam Vashi(SVashi) " 
 
 date: "10/17/2019"
 output: html_document
