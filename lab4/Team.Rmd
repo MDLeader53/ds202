@@ -1,7 +1,7 @@
 ---
 title: 'DS 202 - Lab 4: Tidying and Joining'
 subtitle: "Due: Thursday 10/24/2019 by 10 pm"
-author: "Matthew Peterson
+author: "Matthew Peterson, Shivam Vashi"
 
 date: "10/17/2019"
 output: html_document
@@ -50,7 +50,7 @@ Your git repo will contain the following files: `team.Rmd` and `team.html` conta
 An excerpt of the individual player data of the Cyclone football team is available from Canvas. Dowload the [excel file](cyclonesFootball2018.xlsx) and put the file next to your Rmd files. 
 
 Some abbreviations for the column names can be found in the Glossaries sheet in the Excel file.
-  
+
 **References:**
 
 - [Iowa State University Athelete](https://cyclones.com/index.aspx)
@@ -64,11 +64,12 @@ The Cyclone football data involves multiple Excel sheets and is in a somewhat me
 library(readxl)
 library(tidyverse)
 library(tidyr)
+library(ggplot2)
 defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
 str(defense)
 ```
 
-```{r,echo=FALSE,results='hide'}
+```{r}
 offense <- read_excel('cyclonesFootball2018.xlsx', sheet='Offensive')
 bio <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
 ```
@@ -77,7 +78,7 @@ bio <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
 The three Excel sheets are loaded into R but they are not useful to us before some cleaning. Manipulate the three imported data frames, so that the cleaned data satisfy the following:
 
 1. The player names and opponent names are factors.
-```{r,echo=FALSE,results='hide'}
+```{r}
 defense$Name= factor(defense$Name)
 defense$Opponent_Opponent= factor(defense$Opponent_Opponent)
 
@@ -90,64 +91,63 @@ head(bio)
 ```
 
 2. All offensive and defensive statistics are numerical. The `Weight` column in Biography is also numeric. (Hint: look at `?mutate_at` if you want to save writing some code). 
-```{r,echo=FALSE,results='hide'}
+```{r}
 head(defense)
-bioClean -> bio$Weight <- as.numeric(bio$Weight)
+bioClean <- bio$Weight <- as.numeric(bio$Weight)
 
-head(defense)
-defClean <- defense
-defClean$Tackles_Solo <- as.numeric(defense$Tackles_Solo)
-defClean$Tackles_ASST <-  as.numeric(defense$Tackles_ASST)
-defClean$Tackles_TFL <-  as.numeric(defense$Tackles_TFL)
-defClean$Tackles_Sack <-  as.numeric(defense$Tackles_Sack)
-defClean$Turnover_FF <-  as.numeric(defense$Turnover_FF)
-defClean$Turnover_FR <-  as.numeric(defense$Turnover_FR)
-defClean$Turnover_INT <-  as.numeric(defense$Turnover_INT)
-defClean$Pass_QBH <-  as.numeric(defense$Pass_QBH)
-defClean$Pass_PB <-  as.numeric(defense$Pass_PB)
+str(defense[2])
+defenceClean <- defense
+defenceClean$Tackles_Solo <- as.numeric(defense$Tackles_Solo)
+defenceClean$Tackles_ASST <-  as.numeric(defense$Tackles_ASST)
+defenceClean$Tackles_TFL <-  as.numeric(defense$Tackles_TFL)
+defenceClean$Tackles_Sack <-  as.numeric(defense$Tackles_Sack)
+defenceClean$Turnover_FF <-  as.numeric(defense$Turnover_FF)
+defenceClean$Turnover_FR <-  as.numeric(defense$Turnover_FR)
+defenceClean$Turnover_INT <-  as.numeric(defense$Turnover_INT)
+defenceClean$Pass_QBH <-  as.numeric(defense$Pass_QBH)
+defenceClean$Pass_PB <-  as.numeric(defense$Pass_PB)
 head(defenceClean)
-
-head(offense)
-offClean <- offense
-offClean$Receiving_REC <-  as.numeric(offense$Receiving_REC)
-offClean$Receiving_YDS <-  as.numeric(offense$Receiving_YDS)
-offClean$Receiving_TD <-  as.numeric(offense$Receiving_TD)
-offClean$Receiving_ATT <-  as.numeric(offense$Receiving_ATT)
-offClean$Rushing_TD <-  as.numeric(offense$Rushing_TD)
-offClean$`Passing_CMP-ATT` <-  as.numeric(offense$`Passing_CMP-ATT`)
-offClean$Passing_YDS <-  as.numeric(offense$Passing_YDS)
-offClean$Passing_TD <-  as.numeric(offense$Passing_TD)
-offClean$Passing_INT <-  as.numeric(offense$Passing_INT)
 ```
 3. Separate the `Height` column into two columns. Make sure the newly created columns are numeric. Then create one column that represents `Height` (Hint: Use a unit that works well). Drop any irrelavant columns from this process.
 ```{r,echo=FALSE,results='hide'}
 #
-print(bio)
-
-
+separate(bio, "Height", c("Feet", "Inches"), sep = "-" )
 ```
 4. By cleaning the three data frames in R, at the end of this step you should have the following three clean data frames: `defClean`, `offClean`, and `bioClean`. Print the structures of these data frames. **Make sure your data types make sense for each variable.**
 
 ## Part two: Tidying (A)
 For the following questions, work on the cleaned data frames `defClean`, `offClean`, and `bioClean`.
-```{r,echo=FALSE,results='hide'}
+```{r}
 defClean = defense
 offClean =offense
 bioClean = bio
 ```
 1. Reformat the `defClean` data frame into a tidy format using `gather`. The type of statistic (Tackles_Solo, Tackles_ASST, etc) is added as a **new key column named `Statistic`.** 
-```{r,echo=FALSE,results='hide'}
-defClean <- defClean %<% gather(key = Statistic, value = cases, 2:5)
+```{r}
+defClean <- defClean %>% as.data.frame %>% gather(key = Statistic, value = cases, 2:5)
 ```
 2. Create a histogram for each defensive statistic (make sure to explore different binwidths). Use `facet_wrap` to draw all histograms in a single plot. What defensive skills are rare?
-```{r,echo=FALSE,results='hide'}
-ggplot2(defClean, axis(x='Statistic', y='Name')) + geom_point()
+```{r}
+a <- ggplot(defense, aes(defense$Opponent_Opponent)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlab("Statistic");
+b <- ggplot(defense, aes(defense$Tackles_Solo)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1));
+c <- ggplot(defense, aes(defense$Tackles_ASST)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1));
+d <- ggplot(defense, aes(defense$Tackles_TFL)) + geom_bar()+ theme(axis.text.x = element_text(angle = 90, hjust = 1));
+e <- ggplot(defense, aes(defense$Tackles_Sack)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1));
+a + facet_wrap(~Tackles_Sack, nrow = 1) + ggtitle("Histograms of defensive statistics")
 ```
+TFL Tackles and sacks are rare to see in the statistics. 
+
 3. Did ISU have better defense against West Virginia or Kansas State? Answer this question by creating a scatterplot with x-axis being the number of solo tackles (by each player) against West Virginia, and y-axis being that against Kansas State. A large number of solo tackles indicates good defense. 
 
-```{r,echo=FALSE,results='hide'}
-
+```{r, r,echo=FALSE}
+Virg = defense[which(defense$Opponent_Opponent == "West Virginia" ),]
+Kans = defense[which(defense$Opponent_Opponent == "Kansas State" ),]
+print(Virg)
+ggplot(Virg, aes(Virg$Name, Virg$Tackles_Solo)) + geom_point() + ggtitle("Tackles by player against West Virginia") + xlab("Player") + ylab("Tackles") + theme(axis.text.x = element_text(angle = 90, hjust = 1));
+ggplot(Kans, aes(Kans$Name, Kans$Tackles_Solo)) + geom_point() + ggtitle("Tackles by player gainst Kansas State") + xlab("Player") + ylab("Tackles") + theme(axis.text.x = element_text(angle = 90, hjust = 1));
 ```
+We had a better defense against Kansas state since we had a larger number of solo tackles. 
+
       (**Hint**: From step 1 we have gathered our `defClean` into 4 columns. \
        Now we only want to focus on solo tackles (hint...`filter`). 
         Look at your data structure. What form do we need our data to have in order to easily answer this question? (hint...`spread`)). 
@@ -157,28 +157,26 @@ Now let's turn our attention to the player biography `bioClean`.
   
 1. Separate the `Hometown` column into two columns, namely the city and the state. Print the first few rows of these two columns. (Hint: look at the `sep=` argument of `separate`)
 ```{r,echo=FALSE,results='hide'}
-# strsplit only works for input type character vector
-y =  bioClean %>% as.character() %>%  strsplit(bioClean[6],"," )
-#y is a char vector
-print(y)
-head(bioClean)
+bioClean = separate(bio, "Hometown", c("City", "State"), sep = ", " )
+print(bioClean)
 ```
 2. How many players are there from each state?
-```{r,echo=FALSE,results='hide'}
-
+```{r}
+table(bioClean$State)
 ```
 
-## Part three: Joining data frames
+## Pa rt three: Joining data frames
 
 1. Find out where the offensive players are from by joining the offensive data and player biography data appropriately.
 
-```{r,echo=FALSE,results='hide'}
-head(offense)
-print(bio)
+```{r}
 bioClean %>% full_join(offClean,by='Name')
+print(bioClean)
 ```
 2. Is there a relationship between the weight of a player and the receiving yards (`Receiving_YDS`)?
-
+```{r,echo=FALSE,results='hide'}
+ggplot(bioClean, aes(bioClean$Weight, bioClean$Receiving_YDS)) + geom_point()
+```
 
 3. Explore more. Raise a question that can be answered only by looking at two or more data frames. Then answer that question.
 
