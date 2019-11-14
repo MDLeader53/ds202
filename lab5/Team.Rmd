@@ -14,15 +14,17 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 install.packages("dplyr", dependencies = TRUE)
 library(dplyr)
+library(ggplot2)
 diabetes <- read.table('diabetes.txt',header=TRUE)
 head(diabetes)
 ```
 Replace the missing values in the variable frame, indicated by an empty string ‘’, by ‘NA’. Also, use function droplevels() to remove empty categorical value ‘’ from frame.
 ```{r}
 sum(is.na(diabetes))
-diabetes[diabetes$location= ''] <- 'NA'
-diabetes[diabetes$gender= ''] <- 'NA'
-diabetes[diabetes$frame= ''] <- 'NA'
+diabetes[diabetes$location== ''] <- 'NA'
+diabetes[diabetes$gender== ''] <- 'NA'
+
+droplevels(diabetes$frame)
 ```
 Drop id, bp.2s, and bp.2d from our dataset. Call this dataset diabetes_reduced.
 ```{r}
@@ -45,12 +47,14 @@ sum(is.na(diabetes_clean))
 ## Exploring and transforming data
 
     We see that glyhb is highly right skewed. How can we remedy this? What are some potential downsides to our approach? (throwback to Lecture 7 and fbi dataset).
+    ude thelog of glyhb
 ```{r}
-
+ggplot(data = diabetes_clean, aes(x =weight,y=glyhb))+ geom_point() 
 ```
     Based on your answer to (6), create a new variable called glyhb_star that is no longer right-skewed. Plot a histogram of glyhb_star to verify that the variable is symmetric. From now on use this glyhb_star variable.
 ```{r}
-glyhb_star =  diabetes_clean
+glyhb_star <-  log(diabetes_clean$glyhb)
+diabetes_clean <- select(diabetes_clean, c(glyhb_star))
 ```
     Let’s explore some summary statistics before jumping into visualizations. As mentioned before, our main variable of interest is glyhb_star, which is transformed version of glyhb. Create some tables of summary statistics of glyhb_star grouped by variables you are interested in and may help illuminate which variables are associated with diabetes. Describe your findings. For example:
 ```{r}
@@ -79,10 +83,10 @@ ggplot(diabetes_clean,aes(y=hip,x=waist,alpha=0.5)) + geom_point() + facet_wrap(
 ## Messy data
 
     gather and spread may seem slightly unnatural to use at first, but they are very powerful functions that can transform data into the right format. Explain in your own words what the gather and spread functions do.
-```{r}
 
-```
  Are gather and spread exact complements of each other? Explain.
+ yes when you gather data you take common attributes across your data columms and gather them into a single variable desplayed across rows of data 
+ when you sppread data you take a single variable desplayed across rows of data  and spread them out onto new data colums baced on a common attributes shaired by those rows of data
 
 ##Regression models
 
@@ -103,8 +107,14 @@ when stab.glu = 90, age = 35, waist = 30, ratio = 5.1, and frame = small.
 
 Explain the difference between inference and prediction.
 
+inference makes asumptiions about data points within the scope of the data predictions make asumptions baced on the data about points outside the rangge of the data 
+
 What are advantages/disadvantages to constructing a linear regression model as opposed to a k
 -NN regression model?
+
+knn has some advantages over linear regression it dosn't make any asumptions about the data, there is no trainning step to train data, it has a variaty of distance selection meathiods to choose how the data is grouped. on the downside knn is slower than linear regression, it can't handle outliers as apose to linear regression, if the data is destributed in ways that form odd shaps then it willl come up with bad results ie groups that form the ying-yang shape. It reqires a n- value witch is hard to know
+linear regression has the advantages of can help prevent overfitting when used properly as well as the advantages listed above it also can't andle non-linear functions well
+linear regession model reqires numaric data while knn can use catagorial or numaric
 
 ## On your very first HW, I asked you what you think data science is. Have your views changed?
 Discuss with your partner what you have found to be (1) most surprising about data science, (2) most challenging, and (3) most enjoyable. Write a brief paragraph addressing these points.
